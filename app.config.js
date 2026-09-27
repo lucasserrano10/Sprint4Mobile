@@ -49,6 +49,31 @@ function withGradleConfig(config) {
   });
 }
 
+// 1b. Remove deprecated/unknown 'enableBundleCompression' from app/build.gradle
+function withRemoveBundleCompression(config) {
+  return require('@expo/config-plugins').withDangerousMod(config, [
+    'android',
+    async (cfg) => {
+      const path = require('path');
+      const fs = require('fs');
+      const appBuildGradle = path.join(
+        cfg.modRequest.platformProjectRoot,
+        'app/build.gradle'
+      );
+      if (fs.existsSync(appBuildGradle)) {
+        let content = fs.readFileSync(appBuildGradle, 'utf8');
+        // Remove the enableBundleCompression line — property was removed from ReactExtension
+        content = content.replace(
+          /\s*enableBundleCompression\s*=\s*[^\n]+\n/,
+          '\n'
+        );
+        fs.writeFileSync(appBuildGradle, content);
+      }
+      return cfg;
+    },
+  ]);
+}
+
 // 2. Fix gradle-wrapper.properties: use stable Gradle 8.10.2
 function withStableGradle(config) {
   return require('@expo/config-plugins').withDangerousMod(config, [
@@ -145,6 +170,7 @@ module.exports = ({ config }) => {
 
   cfg = withKotlin2(cfg);
   cfg = withGradleConfig(cfg);
+  cfg = withRemoveBundleCompression(cfg);
   cfg = withStableGradle(cfg);
   cfg = withFixMainModuleName(cfg);
 
