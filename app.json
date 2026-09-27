@@ -11,7 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#00274F"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.fordnexus.app",
@@ -37,7 +39,11 @@
     "plugins": [
       "expo-font"
     ],
-    "extra": {},
+    "extra": {
+      "eas": {
+        "projectId": "d717c5e7-4bcf-444e-a5ca-dddd37262293"
+      }
+    },
     "scheme": "ford-nexus",
     "owner": "lucasserrano10"
   }
