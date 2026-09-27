@@ -5,6 +5,34 @@ const {
 const path = require('path');
 const fs = require('fs');
 
+// 0. Fix root build.gradle: force Kotlin 2.x (EAS SDK 54 ships 1.9.25 by default,
+//    but expo-root-project requires Kotlin 2.x via KSP)
+function withKotlin2(config) {
+  return require('@expo/config-plugins').withDangerousMod(config, [
+    'android',
+    async (cfg) => {
+      const path = require('path');
+      const fs = require('fs');
+      const buildGradlePath = path.join(
+        cfg.modRequest.platformProjectRoot,
+        'build.gradle'
+      );
+      if (fs.existsSync(buildGradlePath)) {
+        let content = fs.readFileSync(buildGradlePath, 'utf8');
+        // Inject kotlinVersion into buildscript ext block if not present
+        if (!content.includes('kotlinVersion')) {
+          content = content.replace(
+            'buildscript {',
+            'buildscript {\n  ext.kotlinVersion = "2.1.21"'
+          );
+          fs.writeFileSync(buildGradlePath, content);
+        }
+      }
+      return cfg;
+    },
+  ]);
+}
+
 // 1. Fix gradle.properties: disable New Architecture and Edge-to-Edge
 function withGradleConfig(config) {
   return withGradleProperties(config, (cfg) => {
@@ -115,6 +143,7 @@ module.exports = ({ config }) => {
     },
   };
 
+  cfg = withKotlin2(cfg);
   cfg = withGradleConfig(cfg);
   cfg = withStableGradle(cfg);
   cfg = withFixMainModuleName(cfg);
