@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#00274F"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.fordnexus.app",
@@ -37,13 +35,11 @@
       "favicon": "./src/assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "./plugins/withGradleConfig"
     ],
-    "extra": {
-      "eas": {
-        "projectId": "d717c5e7-4bcf-444e-a5ca-dddd37262293"
-      }
-    },
+    "entryPoint": "./index.js",
+    "extra": {},
     "scheme": "ford-nexus",
     "owner": "lucasserrano10"
   }
