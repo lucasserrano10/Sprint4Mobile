@@ -16,15 +16,22 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
+        "gradleCommand": ":app:assembleRelease",
+        "withoutCredentials": false
       },
       "ios": {
         "simulator": true
+      },
+      "env": {
+        "ORG_GRADLE_PROJECT_android_kotlinVersion": "1.9.25"
       }
     },
     "production": {
       "android": {
         "buildType": "app-bundle"
+      },
+      "env": {
+        "ORG_GRADLE_PROJECT_android_kotlinVersion": "1.9.25"
       }
     }
   },
