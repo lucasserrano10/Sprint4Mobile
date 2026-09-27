@@ -2,25 +2,20 @@ const { withDangerousMod } = require('@expo/config-plugins');
 const path = require('path');
 const fs = require('fs');
 
-// Force Kotlin 1.9.25 — EAS environment ships 1.9.24 by default,
-// but expo-modules-core Compose Compiler 1.5.15 requires exactly 1.9.25.
+// Force Kotlin 1.9.25 via gradle.properties — this is the only way to override
+// the EAS server-side prebuild environment (modifying build.gradle is overridden).
+// The build.gradle already reads: findProperty('android.kotlinVersion') ?: '1.9.24'
+// so setting android.kotlinVersion=1.9.25 in gradle.properties wins.
 function withKotlin1925(config) {
-  return withDangerousMod(config, [
-    'android',
-    (cfg) => {
-      const buildGradle = path.join(cfg.modRequest.platformProjectRoot, 'build.gradle');
-      if (fs.existsSync(buildGradle)) {
-        let content = fs.readFileSync(buildGradle, 'utf8');
-        // Replace whatever kotlinVersion is set to with 1.9.25
-        content = content.replace(
-          /kotlinVersion\s*=\s*findProperty\([^)]+\)\s*\?:\s*'[^']+'/,
-          "kotlinVersion = findProperty('android.kotlinVersion') ?: '1.9.25'"
-        );
-        fs.writeFileSync(buildGradle, content);
-      }
-      return cfg;
-    },
-  ]);
+  const { withGradleProperties } = require('@expo/config-plugins');
+  return withGradleProperties(config, (cfg) => {
+    const props = cfg.modResults;
+    const key = 'android.kotlinVersion';
+    const idx = props.findIndex(p => p.key === key);
+    if (idx !== -1) props[idx].value = '1.9.25';
+    else props.push({ type: 'property', key, value: '1.9.25' });
+    return cfg;
+  });
 }
 
 /** @type {import('expo/config').ExpoConfig} */
