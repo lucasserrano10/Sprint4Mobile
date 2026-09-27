@@ -19,14 +19,14 @@ function withKotlin2(config) {
       );
       if (fs.existsSync(buildGradlePath)) {
         let content = fs.readFileSync(buildGradlePath, 'utf8');
-        // Inject kotlinVersion into buildscript ext block if not present
-        if (!content.includes('kotlinVersion')) {
-          content = content.replace(
-            'buildscript {',
-            'buildscript {\n  ext.kotlinVersion = "2.1.21"'
-          );
-          fs.writeFileSync(buildGradlePath, content);
-        }
+        // Inject kotlinVersion matching expo-module-gradle-plugin (2.1.20)
+        // and remove any pre-existing kotlinVersion to avoid conflicts
+        content = content.replace(/\s*ext\.kotlinVersion\s*=\s*"[^"]+"\n/, '\n');
+        content = content.replace(
+          'buildscript {',
+          'buildscript {\n  ext.kotlinVersion = "2.1.20"'
+        );
+        fs.writeFileSync(buildGradlePath, content);
       }
       return cfg;
     },
