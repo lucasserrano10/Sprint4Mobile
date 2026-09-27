@@ -1,8 +1,16 @@
 # Ford Nexus — Mobile App
 
-> **Sprint 3 · Mobile Development and IoT**  
-> Desafio Ford × FIAP · Engenharia de Software  
-> Equipe: Ana Clara Melo · David Murillo · Lucas Serrano · Yasmim Gonçalves
+> **Sprint 3 · Mobile Development and IoT**
+> Desafio Ford × FIAP · Engenharia de Software
+
+## 👥 Equipe
+
+| Nome | RM |
+|---|---|
+| Ana Clara Melo | RM559021 |
+| David Murillo | RM559078 |
+| Lucas Serrano | RM555170 |
+| Yasmin Gonçalves | RM559147 |
 
 ---
 
@@ -177,40 +185,45 @@ Para testar no Expo Go:
 
 ## 📦 Gerar APK (Sprint 3 — Entrega)
 
-### Método 1: EAS Build (recomendado — Expo Cloud)
+> **✅ APK gerado e validado:** `FordNexus-Sprint3.apk` (61 MB) — build local com Gradle 8.8 + JDK 17.
+
+### Pré-requisitos
+
+| Ferramenta | Versão | Instalação |
+|---|---|---|
+| Node.js | 18 LTS+ | [nodejs.org](https://nodejs.org) |
+| JDK | 17 (Temurin) | `brew install --cask temurin@17` |
+| Android SDK | API 34 + NDK 26.1 | `sdkmanager "platforms;android-34" "ndk;26.1.10909125"` |
+
+### Passo a passo — Build Local (Verificado ✅)
 
 ```bash
-# 1. Fazer login no Expo
-eas login
+# 1. Instalar dependências
+npm install
 
-# 2. Configurar o projeto (primeira vez)
-eas build:configure
-
-# 3. Gerar APK de preview (distribuição interna)
-npm run build:android
-
-# ou diretamente:
-eas build --platform android --profile preview
-```
-
-O EAS Build retorna um link de download para o APK ao final do processo (5-15 minutos).
-
-### Método 2: Build local
-
-```bash
-# Pré-requisito: Android Studio + JDK 17 instalados
-
-# Gerar bundle nativo
+# 2. Gerar o projeto nativo Android
 npx expo prebuild --platform android
 
-# Entrar na pasta android
-cd android
+# 3. Criar arquivo com caminho do SDK
+echo "sdk.dir=$HOME/android-sdk" > android/local.properties
 
-# Gerar APK debug
-./gradlew assembleDebug
+# 4. Gerar APK Release
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+export ANDROID_HOME=$HOME/android-sdk
+cd android && ./gradlew assembleRelease --no-daemon
 
 # APK gerado em:
-# android/app/build/outputs/apk/debug/app-debug.apk
+# android/app/build/outputs/apk/release/app-release.apk
+```
+
+### Instalar no dispositivo
+
+```bash
+# Via ADB (dispositivo conectado via USB com depuração ativa)
+adb install android/app/build/outputs/apk/release/app-release.apk
+
+# Ou transfira o arquivo FordNexus-Sprint3.apk para o Android
+# e instale manualmente (habilite "Fontes desconhecidas")
 ```
 
 ### Perfis de Build (`eas.json`)

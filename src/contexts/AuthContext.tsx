@@ -31,7 +31,11 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
         const appUser = await getUserById(firebaseUser.uid);
         setUser(appUser);
       } else {
-        setUser(null);
+        // Não limpa o usuário se for uma conta demo (sem Firebase real)
+        setUser(prev => {
+          if (prev?.uid === 'demo-uid-fordnexus') return prev;
+          return null;
+        });
       }
       setLoading(false);
     });
@@ -40,7 +44,11 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
   }, []);
 
   const logout = useCallback(async () => {
-    await firebaseLogout();
+    try {
+      await firebaseLogout();
+    } catch {
+      // Ignora erro de logout para contas demo sem Firebase configurado
+    }
     setUser(null);
   }, []);
 

@@ -46,6 +46,22 @@ export function useAuth(): UseAuthReturn {
       setLoading(true);
       setError(null);
       try {
+        // Verifica demo antes de qualquer chamada ao Firebase
+        if (
+          email.trim().toLowerCase() === 'demo@fordnexus.com' &&
+          password === 'Ford@2025'
+        ) {
+          setUser({
+            uid: 'demo-uid-fordnexus',
+            name: 'Lucas Serrano',
+            email: 'demo@fordnexus.com',
+            phone: '(11) 99999-0000',
+            provider: 'password',
+            role: 'owner',
+            createdAt: Date.now(),
+          });
+          return;
+        }
         const user = await loginWithEmail(email, password);
         setUser(user);
       } catch (err) {

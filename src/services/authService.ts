@@ -44,7 +44,25 @@ export async function registerWithEmail(
   return user;
 }
 
+const DEMO_USER: User = {
+  uid: 'demo-uid-fordnexus',
+  name: 'Lucas Serrano',
+  email: 'demo@fordnexus.com',
+  phone: '(11) 99999-0000',
+  provider: 'password',
+  role: 'owner',
+  createdAt: Date.now(),
+};
+
 export async function loginWithEmail(email: string, password: string): Promise<User> {
+  // Demo credentials — funciona sem Firebase configurado
+  if (
+    email.toLowerCase() === 'demo@fordnexus.com' &&
+    password === 'Ford@2025'
+  ) {
+    return DEMO_USER;
+  }
+
   const credential = await signInWithEmailAndPassword(auth, email, password);
 
   const user: User = {
