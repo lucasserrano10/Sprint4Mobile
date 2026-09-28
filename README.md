@@ -342,4 +342,11 @@ adb install android/app/build/outputs/apk/release/app-release.apk
 
 ---
 
+## 📋 Imagens das Telas
+<img width="737" height="789" alt="Captura de Tela 2026-09-27 às 21 26 44" src="https://github.com/user-attachments/assets/b2ab29fd-b648-48e2-af42-0bb83cddefc8" />
+<img width="739" height="785" alt="Captura de Tela 2026-09-27 às 21 26 20" src="https://github.com/user-attachments/assets/ced23832-ffed-48ce-aa54-fa490e93af9a" />
+<img width="749" height="783" alt="Captura de Tela 2026-09-27 às 21 26 36" src="https://github.com/user-attachments/assets/9b371b41-f40e-4844-9e0b-933c01fb81a8" />
+<img width="737" height="789" alt="Captura de Tela 2026-09-27 às 21 26 44" src="https://github.com/user-attachments/assets/e867fecc-4bcf-4632-a2ee-e0601bc95c9d" />
+
+
 *Ford Nexus · FIAP · 2024 — Sprint 3 entrega: 27/09*
